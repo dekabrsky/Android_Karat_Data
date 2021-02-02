@@ -1,19 +1,18 @@
 package com.example.androidkaratdata;
 
 import androidx.annotation.NonNull;
-import androidx.annotation.RequiresApi;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.Toolbar;
 
 import android.app.AlertDialog;
 import android.app.Dialog;
+import android.content.Context;
 import android.content.ContextWrapper;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.net.Uri;
-import android.os.Build;
 import android.os.Bundle;
-import android.os.Environment;
 import android.util.Log;
 import android.view.View;
 import android.widget.ArrayAdapter;
@@ -29,25 +28,25 @@ import android.widget.Toast;
 import com.example.androidkaratdata.models.DeviceQuery;
 
 import java.io.File;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Date;
+
+import static com.example.androidkaratdata.SettingActivity.APP_PREFERENCES;
 
 
 public class MainActivity extends AppCompatActivity {
 
     Toolbar toolbar;
     EditText editText_name;
-    TextView textView_device;
+    TextView textView_device, textView_connectionSettings;
     Spinner spinnerDevice;
-    //DatePicker datePicker;
     CalendarView calendarView;
     TextView textView;
-    ImageButton imageButtonSetting, openBtn;
+    ImageButton imageButtonSetting, openBtn, editConnection;
     Button buttonRead;
     DeviceQuery query;
+    SharedPreferences mSettings;
 
-    /*String device = {"2-213/223", "306/7/8"};*/
 
     String port, ip, adr, mode;
     int cYear, cMonth, cDay;
@@ -60,42 +59,24 @@ public class MainActivity extends AppCompatActivity {
 
         setContentView(R.layout.activity_main);
 
-        Intent intent = getIntent();
-
-        //забираем данные из настроек
-        port = intent.getStringExtra("port");
-        ip = intent.getStringExtra("ip");
-        adr = intent.getStringExtra("adr");
-        mode = intent.getStringExtra("mode");
-
-        dialogCounter = 0;
-
-        if (port != null && ip != null && adr != null)
-            Toast.makeText(getApplicationContext(),
-                ("Main - Address: "+ip+":"+port+"/"
-                        +adr+"\n"), Toast.LENGTH_LONG).show();
-        else Toast.makeText(getApplicationContext(),
-                "Адрес прибора неизвестен", Toast.LENGTH_LONG).show();
-
-        //toolbar
         toolbar = findViewById(R.id.myToolBar);
-
         textView_device = findViewById(R.id.tView_device);
-        textView_device.setText(R.string.tView_device);
-
-        //проверить
         textView = findViewById(R.id.textView_date);
-
-        setSupportActionBar(toolbar);
-
-        //editText
+        textView_connectionSettings = findViewById(R.id.connection_settings);
         editText_name = findViewById(R.id.editText_name);
-
-        //spinner activity_main
         spinnerDevice = findViewById(R.id.spinner_device);
+        editConnection = findViewById(R.id.imageButton_connection_setting);
+
+
 
         ArrayAdapter adapter = ArrayAdapter.createFromResource(this, R.array.spinner_array, R.layout.spinner_item);
         spinnerDevice.setAdapter(adapter);
+        setSupportActionBar(toolbar);
+
+        dialogCounter = 0;
+
+        mSettings = getSharedPreferences(APP_PREFERENCES, Context.MODE_PRIVATE);
+        textView_connectionSettings.setText(getConnectionSettings());
 
         calendarView = findViewById(R.id.calendarView);
         start.setTime(calendarView.getDate());
@@ -109,14 +90,12 @@ public class MainActivity extends AppCompatActivity {
                 String selectedDate = new StringBuilder().append(cMonth + 1)
                         .append("-").append(cDay).append("-").append(cYear - 100)
                         .append(" ").toString();
-                //Toast.makeText(getApplicationContext(), selectedDate, Toast.LENGTH_LONG).show();
                 textView.setText("Начать с " + selectedDate);
             }
         });
 
         //обработчик кнопки "настройки"
         imageButtonSetting = findViewById(R.id.imageButton_setting);
-
         imageButtonSetting.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -124,9 +103,15 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        editConnection.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, SettingActivity.class);
+                startActivity(intent);
+            }
+        });
 
         buttonRead = findViewById(R.id.button_read);
-
         buttonRead.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -164,28 +149,29 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     startActivity(Intent.createChooser(intent, "Выберите менеджер файлов (проводник)"));
                 } catch (android.content.ActivityNotFoundException ex) {
-                    // Potentially direct the user to the Market with a Dialog
                     Toast.makeText(getApplicationContext(), "Установите один из менеджеров файлов.", Toast.LENGTH_SHORT).show();
                 }
-                /*Intent intent = new Intent(Intent.ACTION_GET_CONTENT);
-                Uri uri = Uri.parse(Environment.getExternalStorageDirectory().getPath()
-                        +  "/Android/data/com.example.androidkaratdata/files/Karat/");
-                Log.d("Uri", uri.getPath());
-                intent.setDataAndType(uri, "text/csv");
-                startActivity(Intent.createChooser(intent, "Open folder"));*/
             }
         });
     }
 
+    private String getConnectionSettings() {
+        if(mSettings.contains("IP")) ip = (mSettings.getString("IP", ""));
+        if(mSettings.contains("Port")) port = (mSettings.getString("Port", ""));
+        if(mSettings.contains("Adr")) adr = (mSettings.getString("Adr", ""));
+        if(mSettings.contains("Mode")) mode = (mSettings.getBoolean("Mode", true))?"TCP":"USB";
+        return mode + " " + ip + ":" + port + "/" + adr;
+    }
+
     private ArrayList<String> getArchivesTypes() {
         ArrayList<String> res = new ArrayList<>();
-        CheckBox h = findViewById(R.id.checkBox3);
-        CheckBox d = findViewById(R.id.checkBox2);
-        CheckBox m = findViewById(R.id.checkBox4);
-        CheckBox emer = findViewById(R.id.checkBox6);
-        CheckBox integ = findViewById(R.id.checkBox5);
-        CheckBox prot = findViewById(R.id.checkBox8);
-        CheckBox event = findViewById(R.id.checkBox7);
+        CheckBox h = findViewById(R.id.hour);
+        CheckBox d = findViewById(R.id.day);
+        CheckBox m = findViewById(R.id.month);
+        CheckBox emer = findViewById(R.id.alarm);
+        CheckBox integ = findViewById(R.id.integral);
+        CheckBox prot = findViewById(R.id.protected_journal);
+        CheckBox event = findViewById(R.id.event);
         if (h.isChecked())
             res.add(getString(R.string.hourly));
         if (d.isChecked())
@@ -222,10 +208,7 @@ public class MainActivity extends AppCompatActivity {
     DialogInterface.OnClickListener myClickListener = new DialogInterface.OnClickListener() {
         public void onClick(DialogInterface dialog, int which) {
             switch (which) {
-                // положительная кнопка
                 case Dialog.BUTTON_POSITIVE:
-                    //Toast.makeText(getApplicationContext(),
-                    //       "Тут должно начаться чтение", Toast.LENGTH_LONG).show();
                     Intent toTerm = new Intent(MainActivity.this, TCPTerminalActivity.class);
                     toTerm.putExtra("query", query);
                     if (editText_name.getText().toString() != null)
@@ -233,7 +216,6 @@ public class MainActivity extends AppCompatActivity {
                                 .replaceAll("[^\\da-zA-Zа-яёА-ЯЁ]", ""));
                     startActivity(toTerm);
                     break;
-                // негативная кнопка
                 case Dialog.BUTTON_NEGATIVE:
                     Toast.makeText(getApplicationContext(),
                             "Исправьте поля", Toast.LENGTH_SHORT).show();

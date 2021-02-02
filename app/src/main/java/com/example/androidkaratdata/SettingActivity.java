@@ -80,14 +80,7 @@ public class SettingActivity extends AppCompatActivity {
                 editor.putBoolean("Mode", mode);
                 editor.apply();
                 Intent intent = new Intent(SettingActivity.this, MainActivity.class);
-                intent.putExtra("port", port.getText().toString());
-                intent.putExtra("ip", ip.getText().toString());
-                intent.putExtra("adr", adr.getText().toString());
-                intent.putExtra("mode", mode ? "TCP" : "USB");
-                /*Toast toast = Toast.makeText(getApplicationContext(),
-                        ("Setting - Address: "+ip.getText().toString()+":"+port.getText().toString()+"/"
-                                +adr.getText().toString()+"\n"), Toast.LENGTH_LONG);
-                toast.show();*/
+                
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                 startActivity(intent);
             }

@@ -17,7 +17,7 @@
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="1.0"
+        app:layout_constraintVertical_bias="0.0"
         tools:ignore="MissingConstraints">
 
         <androidx.constraintlayout.widget.ConstraintLayout
@@ -28,8 +28,8 @@
             <include
                 android:id="@+id/include"
                 layout="@layout/appbar"
-                app:layout_constraintBottom_toTopOf="@+id/editText_name"
-                android:visibility="invisible"/>
+                android:visibility="invisible"
+                app:layout_constraintBottom_toTopOf="@+id/editText_name" />
 
 
             <EditText
@@ -39,20 +39,48 @@
                 android:layout_marginStart="15dp"
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
+                android:background="@color/colorPrimaryDark"
                 android:hint="@string/eText_name_save"
                 android:inputType="text"
-                android:textColor="@color/color"
-                android:textSize="20sp"
                 android:padding="10dp"
+                android:textColor="@color/color"
+                android:textColorHint="@color/hint"
+                android:textSize="20sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/include"
-                app:layout_constraintVertical_bias="0.0"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <TextView
+                android:id="@+id/connection_settings"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="16dp"
+                android:layout_marginTop="15dp"
+                android:layout_marginEnd="15dp"
                 android:background="@color/colorPrimaryDark"
-                android:textColorHint="@color/hint"
-                />
+                android:padding="10dp"
+                android:text="TCP 46.48.42.174:50000"
+                android:textColor="@color/color"
+                android:textSize="20sp"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/editText_name"
+                app:layout_constraintVertical_bias="0.0" />
+
+            <ImageButton
+                android:id="@+id/imageButton_connection_setting"
+                android:layout_width="47dp"
+                android:layout_height="47dp"
+                android:background="@color/transparent"
+                app:layout_constraintRight_toRightOf="@+id/connection_settings"
+                app:layout_constraintTop_toTopOf="@+id/connection_settings"
+                app:layout_constraintVertical_bias="0.0"
+                app:srcCompat="@drawable/ic_baseline_edit_24" />
 
 
             <TextView
@@ -69,7 +97,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/editText_name"
+                app:layout_constraintTop_toBottomOf="@+id/connection_settings"
                 app:layout_constraintVertical_bias="0.0" />
 
             <Spinner
@@ -96,14 +124,14 @@
                 android:layout_marginTop="15dp"
                 android:layout_marginEnd="15dp"
                 android:background="@drawable/calender_style"
-                android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
                 android:dateTextAppearance="@style/CalenderViewDateCustomText"
+                android:weekDayTextAppearance="@style/CalenderViewWeekCustomText"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="1.0"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/textView_date"
-                app:layout_constraintVertical_bias="0.005" />
+                app:layout_constraintVertical_bias="0.0" />
 
             <TextView
                 android:id="@+id/textView_date"
@@ -133,7 +161,7 @@
                 app:layout_constraintTop_toBottomOf="@+id/calendarView" />
 
             <CheckBox
-                android:id="@+id/checkBox2"
+                android:id="@+id/day"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -143,64 +171,64 @@
                 android:textSize="18sp"
                 android:theme="@style/CheckboxStyle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/checkBox6" />
+                app:layout_constraintTop_toTopOf="@+id/hour" />
 
             <CheckBox
-                android:id="@+id/checkBox3"
+                android:id="@+id/hour"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 android:text="почасовой"
-                android:theme="@style/CheckboxStyle"
                 android:textColor="@color/Gainsboro"
                 android:textSize="18sp"
+                android:theme="@style/CheckboxStyle"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="@+id/tViewArchive" />
 
             <CheckBox
-                android:id="@+id/checkBox4"
+                android:id="@+id/month"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 android:text="помесячный"
                 android:textColor="@color/Gainsboro"
-                android:theme="@style/CheckboxStyle"
                 android:textSize="18sp"
+                android:theme="@style/CheckboxStyle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/checkBox2" />
+                app:layout_constraintTop_toTopOf="@+id/day" />
 
             <CheckBox
-                android:id="@+id/checkBox5"
+                android:id="@+id/integral"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 android:text="интегральный"
-                android:theme="@style/CheckboxStyle"
                 android:textColor="@color/Gainsboro"
                 android:textSize="18sp"
+                android:theme="@style/CheckboxStyle"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/checkBox4" />
+                app:layout_constraintTop_toTopOf="@+id/month" />
 
             <CheckBox
-                android:id="@+id/checkBox6"
+                android:id="@+id/alarm"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 android:text="аварийный"
                 android:textColor="@color/Gainsboro"
-                android:theme="@style/CheckboxStyle"
                 android:textSize="18sp"
+                android:theme="@style/CheckboxStyle"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/checkBox3" />
+                app:layout_constraintTop_toTopOf="@+id/integral" />
 
             <CheckBox
-                android:id="@+id/checkBox7"
+                android:id="@+id/event"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="16dp"
@@ -209,25 +237,27 @@
                 android:textColor="@color/Gainsboro"
                 android:textSize="18sp"
                 android:theme="@style/CheckboxStyle"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/checkBox5" />
+                app:layout_constraintTop_toTopOf="@+id/alarm" />
 
             <CheckBox
-                android:id="@+id/checkBox8"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:id="@+id/protected_journal"
+                android:layout_width="0dp"
+                android:layout_height="0dp"
                 android:layout_marginStart="16dp"
                 android:layout_marginTop="40dp"
                 android:text="защ. журнал"
                 android:textColor="@color/Gainsboro"
                 android:textSize="18sp"
                 android:theme="@style/CheckboxStyle"
+                android:visibility="gone"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.0"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/checkBox7" />
+                app:layout_constraintTop_toTopOf="@+id/event" />
 
             <Button
                 android:id="@+id/button_read"
@@ -242,7 +272,7 @@
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintHorizontal_bias="0.502"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@+id/checkBox8"
+                app:layout_constraintTop_toTopOf="@+id/protected_journal"
                 app:layout_constraintVertical_bias="0.0" />
 
             <androidx.constraintlayout.widget.Guideline
